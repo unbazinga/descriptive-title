@@ -1,15 +1,23 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [Header("Generic Variables")]
+    [Header("Generic Variables")] 
+    public Animator playerAnimator;
     public Transform playerCam;
     public Transform orientation;
+    public Transform objectInteract;
+    public LayerMask objectInteractLayers;
+    public static GameObject holdArea;
+    [FormerlySerializedAs("ObjectInteractReach")] public float objectInteractReach;
     private Rigidbody rb;
+    private bool isInteractableHighlighted = false;
     
     [Header("Movement -- Generic")]
     public float moveSpeed;
@@ -44,6 +52,7 @@ public class PlayerMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        holdArea = GameObject.FindGameObjectWithTag("Holder");
     }
 
     // Update is called once per frame
@@ -62,11 +71,14 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.drag = 0f;
         }
+        
+        
     }
 
     private void FixedUpdate()
     {
         Movement();
+        
     }
 
     void Movement()
@@ -101,21 +113,9 @@ public class PlayerMovement : MonoBehaviour
             Jump();
             Invoke(nameof(ResetJump), jumpCooldown);
         }
-
-        if (Input.GetButtonDown("Fire1"))
-        {
-            
-        }
-        if (Input.GetButtonDown("Fire2"))
-        {
-            
-        }
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            
-        }
         
-
+        playerAnimator.SetBool("IsWalkingBackwards", Input.GetKey(KeyCode.S));
+        playerAnimator.SetBool("IsWalkingForwards", Input.GetKey(KeyCode.W));
     }
 
     void SpeedControls()
@@ -127,6 +127,6 @@ public class PlayerMovement : MonoBehaviour
             rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
         }
     }
-    
-    
+
+
 }

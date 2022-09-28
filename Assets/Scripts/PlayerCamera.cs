@@ -46,4 +46,6 @@ public class PlayerCamera : MonoBehaviour
         this.transform.localRotation = Quaternion.Euler(Vector3.right * mousePitch + Vector3.up * (mouseDelta.x * sensitivity));
 
     }
+    
+    
 }

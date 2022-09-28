@@ -30,6 +30,36 @@ Transform:
   m_Father: {fileID: 2464343588313912160}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &242678351187329430
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5910797326362192065}
+  m_Layer: 7
+  m_Name: TracerPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5910797326362192065
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 242678351187329430}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.226, z: 0.9}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2464343588313912160}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &647037768738435329
 GameObject:
   m_ObjectHideFlags: 0
@@ -480,6 +510,7 @@ Transform:
   - {fileID: 2569898378114760268}
   - {fileID: 3616101239720683648}
   - {fileID: 3732129962615507501}
+  - {fileID: 5910797326362192065}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -515,11 +546,14 @@ MonoBehaviour:
   WeaponDefinition: {fileID: 11400000, guid: e001fde8ad4d4cb48a4aa1b3cc8916ad, type: 2}
   WeaponAttachments: []
   BulletTrail: {fileID: 328621789431213768, guid: d5666f44bfa53304287442b6d8198e52, type: 3}
+  Shell: {fileID: 6408961382448975050, guid: 049695898fab55e46b7ee2c909869d04, type: 3}
+  ShellEjector: {fileID: 3732129962615507501}
   weaponHolder: {fileID: 0}
   weaponFirePoint: {fileID: 3616101239720683648}
+  weaponTracerPoint: {fileID: 5910797326362192065}
   gfxColliders:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 7729937762833931399}
+  - {fileID: 8204721606916766384}
   - {fileID: 0}
   - {fileID: 0}
   weaponGfxs:
@@ -527,6 +561,7 @@ MonoBehaviour:
   - {fileID: 3316504349949514330}
   - {fileID: 647037768738435329}
   - {fileID: 3689942970763987552}
+  bulletHitForce: 2
   throwForce: 4
   throwExtraForce: 2.7
   rotationForce: 2

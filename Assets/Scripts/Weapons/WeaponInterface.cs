@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Security.Cryptography;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.Serialization;
-using Random = UnityEngine.Random;
 
 public class WeaponInterface : MonoBehaviour, IPickupable
 {
@@ -15,8 +12,10 @@ public class WeaponInterface : MonoBehaviour, IPickupable
     public Transform ShellEjector;
     public Transform weaponHolder;
     public Transform weaponFirePoint;
+    public Transform weaponTracerPoint;
     public Collider[] gfxColliders;
     public GameObject[] weaponGfxs;
+    public float bulletHitForce;
     public float throwForce;
     public float throwExtraForce;
     public float rotationForce;
@@ -29,18 +28,22 @@ public class WeaponInterface : MonoBehaviour, IPickupable
     public void Shoot()
     {
         Debug.Log("Shooting");
-        Vector3 direction = GetDirection();
-        if (Physics.Raycast(weaponFirePoint.position, direction, out RaycastHit hit, float.MaxValue,
+        var direction = GetDirection();
+        if (Physics.Raycast(weaponFirePoint.position, direction, out var hit, float.MaxValue,
                 shootMask))
         {
-            Debug.Log("Raycast out");   
-            TrailRenderer trail = Instantiate(BulletTrail, weaponFirePoint.position, Quaternion.identity);
+            Debug.Log("Raycast out");
+            var trail = Instantiate(BulletTrail, weaponTracerPoint.position, Quaternion.identity);
             Instantiate(Shell, ShellEjector.position, ShellEjector.rotation);
             Debug.Log("Trail Spawning");
             StartCoroutine(SpawnTrail(trail, hit));
-            
+            if (hit.transform.TryGetComponent(out Rigidbody hitRb))
+                hitRb.AddForce(gameObject.transform.forward * bulletHitForce, ForceMode.Impulse);
+            else
+                Debug.Log("Object shot has no rigidbody");
         }
     }
+
     public void Pickup(Transform t)
     {
         if (_held) return;
@@ -49,15 +52,10 @@ public class WeaponInterface : MonoBehaviour, IPickupable
         transform.parent = weaponHolder;
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
-        foreach (var collider in gfxColliders)
-        {
-            collider.enabled = false;
-        }
+        foreach (var collider in gfxColliders) collider.enabled = false;
 
-        foreach (var gfx in weaponGfxs)
-        {
-            gfx.layer = weaponGfxLayer;
-        }
+        foreach (var gfx in weaponGfxs) gfx.layer = weaponGfxLayer;
+
         _held = true;
     }
 
@@ -73,23 +71,18 @@ public class WeaponInterface : MonoBehaviour, IPickupable
         _rb.velocity += Vector3.up * (throwExtraForce * f);
         _rb.angularVelocity = Random.onUnitSphere * rotationForce;
         transform.parent = null;
-        foreach (var collider in gfxColliders)
-        {
-            collider.enabled = true;
-        }
+        foreach (var collider in gfxColliders) collider.enabled = true;
 
-        foreach (var gfx in weaponGfxs)
-        {
-            gfx.layer = weaponDefLayer;
-        }
+        foreach (var gfx in weaponGfxs) gfx.layer = weaponDefLayer;
+
         _held = false;
     }
 
     private Vector3 GetDirection()
     {
-        Vector3 spread = new Vector3(WeaponDefinition.weaponSpread, WeaponDefinition.weaponSpread,
+        var spread = new Vector3(WeaponDefinition.weaponSpread, WeaponDefinition.weaponSpread,
             WeaponDefinition.weaponSpread);
-        Vector3 dir = weaponFirePoint.forward;
+        var dir = weaponFirePoint.forward;
         if (shouldBulletsSpread)
         {
             dir += new Vector3(
@@ -106,7 +99,7 @@ public class WeaponInterface : MonoBehaviour, IPickupable
     {
         Debug.Log("Spawning Trail");
         float time = 0;
-        Vector3 startPosition = Trail.transform.position;
+        var startPosition = Trail.transform.position;
         while (time < 1)
         {
             Trail.transform.position = Vector3.Lerp(startPosition, hit.point, time);
@@ -115,7 +108,7 @@ public class WeaponInterface : MonoBehaviour, IPickupable
         }
 
         Trail.transform.position = hit.point;
-        
+
         Destroy(Trail.gameObject, Trail.time);
     }
 }

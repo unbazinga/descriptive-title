@@ -3,18 +3,19 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Holder
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Camera Ignores
   - Water
   - UI
   - Ground
   - Weapon
   - WeaponGFX
-  - 
+  - PhysicsObjects
   - Shells
   - Player
   - 
