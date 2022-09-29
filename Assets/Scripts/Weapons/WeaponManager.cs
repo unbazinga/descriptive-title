@@ -27,6 +27,8 @@ public class WeaponManager : MonoBehaviour
         StrengthBarHandler.maxStrength = throwPowerMax;
     }
 
+    public bool IsWeaponHeld() => _isWeaponHeld;
+
     private void Update()
     {
         

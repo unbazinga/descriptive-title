@@ -10,6 +10,8 @@ public class PlayerMovement : MonoBehaviour
 {
     [Header("Generic Variables")] 
     public Animator playerAnimator;
+
+    public string currentAnim = "Idle";
     public Transform playerCam;
     public Transform orientation;
     public Transform objectInteract;
@@ -31,7 +33,9 @@ public class PlayerMovement : MonoBehaviour
     
     [Header("Movement -- Jumping")]
     private bool readyToJump = true;
-    private float jumpCooldown = 0.45f;
+    private float jumpCooldown = .75f;
+    private float timeToJump = 0.15f;
+    private float waitBeforeJump = 0f;
     public float jumpForce;
     private float airMoveMulti = 0.25f;
 
@@ -58,7 +62,7 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
+        grounded = Physics.Raycast(transform.position + new Vector3(0,0.05f,0), Vector3.down, playerHeight / 3.2f, whatIsGround);
         
         Inputs();
         SpeedControls();
@@ -78,7 +82,7 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         Movement();
-        
+        waitBeforeJump += Time.deltaTime;
     }
 
     void Movement()
@@ -93,6 +97,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Jump()
     {
+        waitBeforeJump = 0f;
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
     }
@@ -107,15 +112,51 @@ public class PlayerMovement : MonoBehaviour
         x = Input.GetAxisRaw("Horizontal");
         y = Input.GetAxisRaw("Vertical");
 
-        if (Input.GetButtonDown("Jump") && readyToJump && grounded)
+        if (Input.GetButtonDown("Jump") && readyToJump && grounded && waitBeforeJump > timeToJump)
         {
             readyToJump = false;
             Jump();
             Invoke(nameof(ResetJump), jumpCooldown);
         }
-        
-        playerAnimator.SetBool("IsWalkingBackwards", Input.GetKey(KeyCode.S));
-        playerAnimator.SetBool("IsWalkingForwards", Input.GetKey(KeyCode.W));
+        if(grounded) {        
+            if (Input.GetKey(KeyCode.S))
+            {
+                currentAnim = "Walking Backwards";
+                // playerAnimator.CrossFadeInFixedTime("Walking Backwards", 0.1f);
+                // playerAnimator.Play("Walking Backwards");
+            } else if (Input.GetKey(KeyCode.W))
+            {
+                if (Input.GetKey(KeyCode.D))
+                {
+                    currentAnim = "Forwards Right";
+                    // playerAnimator.CrossFadeInFixedTime("Forwards Right", 0.1f);
+                    // playerAnimator.Play("Forwards Right");
+    
+                }
+                else
+                {
+
+                    currentAnim = "Walking Forwards";
+                    // playerAnimator.CrossFadeInFixedTime("Walking Forwards", 0.1f);
+                    // playerAnimator.Play("Walking Forwards");
+    
+                }
+            } else if (Input.GetKey(KeyCode.Space))
+            {
+                currentAnim = "Jump";
+            }
+            else
+            {
+                
+                currentAnim = "Idle";
+                // playerAnimator.CrossFadeInFixedTime("Idle", 0.1f);
+                // playerAnimator.Play("Idle");
+    
+            }
+        }
+
+        //playerAnimator.CrossFade(currentAnim, 0.25f);
+        playerAnimator.Play(currentAnim);
     }
 
     void SpeedControls()
@@ -128,5 +169,8 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawRay(transform.position + new Vector3(0,0.05f,0), transform.TransformDirection(Vector3.down.normalized * (playerHeight / 5.6f)));
+    }
 }

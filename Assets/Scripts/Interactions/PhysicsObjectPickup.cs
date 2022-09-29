@@ -14,6 +14,7 @@ public class PhysicsObjectPickup : MonoBehaviour
     public float moveDeadzone; // Allowed distance between held object and object holding area before moving the held object
     public float interactRange; // Allowed distance between object and player for interaction / pickups
     public float moveStrength; // Object move speed?
+    public bool isHeldObjectAWeapon;
     public Transform objectHoldArea;
     public Transform objectInteractPosition;
     public LayerMask objectInteractLayers;
@@ -87,26 +88,54 @@ public class PhysicsObjectPickup : MonoBehaviour
         target.TryGetComponent(out Rigidbody targetRb);
         if (targetRb)
         {
-            Debug.Log("Pick up");
-            _targetRb = targetRb;
-            _targetRb.useGravity = false;
-            _targetRb.drag = 10;
+            if (target.TryGetComponent(out WeaponInterface weaponInterface))
+            {
+                weaponInterface.HeldAsPhysicsObject = true;
+                isHeldObjectAWeapon = true;
+                Debug.Log("Pick up weapon object");
+                _targetRb = targetRb;
+                _targetRb.useGravity = false;
+                _targetRb.drag = 10;
             
-            target.transform.SetParent(objectParent);
-            _heldObj = target;
+                target.transform.SetParent(objectParent);
+                _heldObj = target;
+            }
+            else
+            {
+                Debug.Log("Pick up");
+                _targetRb = targetRb;
+                _targetRb.useGravity = false;
+                _targetRb.drag = 10;
+                
+                target.transform.SetParent(objectParent);
+                _heldObj = target;
+            }
         }
     }
 
     void Drop(float force = 0f)
     {
-        
-        Debug.Log("Drop");
-        _targetRb.transform.parent = null;
-        _targetRb.useGravity = true;
-        _targetRb.drag = 0;
-        _targetRb.velocity = Vector3.zero;
-        _targetRb.AddForce(playerOrientation.forward * force);
-        _heldObj = null;
+        if (isHeldObjectAWeapon)
+        {
+            _heldObj.TryGetComponent(out WeaponInterface weaponInterface);
+            weaponInterface.HeldAsPhysicsObject = false;
+            Debug.Log("Drop");
+            _targetRb.transform.parent = null;
+            _targetRb.useGravity = true;
+            _targetRb.drag = 0;
+            _targetRb.velocity = Vector3.zero;
+            _targetRb.AddForce(playerOrientation.forward * force);
+            _heldObj = null;
+        } else
+        {
+            Debug.Log("Drop");
+            _targetRb.transform.parent = null;
+            _targetRb.useGravity = true;
+            _targetRb.drag = 0;
+            _targetRb.velocity = Vector3.zero;
+            _targetRb.AddForce(playerOrientation.forward * force);
+            _heldObj = null;
+        }
     }
     
     private GameObject LookingAtInteractable()

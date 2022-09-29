@@ -22,6 +22,7 @@ public class WeaponInterface : MonoBehaviour, IPickupable
     public int weaponGfxLayer;
     public int weaponDefLayer;
     public bool _held;
+    public bool HeldAsPhysicsObject { get; set; }
     public bool shouldBulletsSpread;
     public LayerMask shootMask;
 
@@ -47,6 +48,7 @@ public class WeaponInterface : MonoBehaviour, IPickupable
     public void Pickup(Transform t)
     {
         if (_held) return;
+        if (HeldAsPhysicsObject) return;
         Debug.Log("Pickup :))");
         Destroy(_rb);
         transform.parent = weaponHolder;
