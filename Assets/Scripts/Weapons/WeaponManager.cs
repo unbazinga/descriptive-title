@@ -12,6 +12,7 @@ public class WeaponManager : MonoBehaviour
     public int weaponLayer;
 
     public Transform weaponHolder, playerCamera, orientation;
+    public GameObject player;
     public StrengthBarHandler StrengthBarHandler;
     private bool _isWeaponHeld;
     private WeaponInterface _heldWeapon;
@@ -52,6 +53,15 @@ public class WeaponManager : MonoBehaviour
                 StrengthBarHandler.ResetBar();
                 shouldFadeOut = true;
 
+            }
+
+            if (Input.GetKeyDown(KeyCode.T))
+            {
+                player.TryGetComponent(out PlayerMovement pMovement);
+                foreach (var mod in pMovement.HeldAttachments)
+                {
+                    Debug.Log(mod.name);
+                }
             }
         } else if (Input.GetKeyDown(KeyCode.E))
         {
@@ -171,6 +181,19 @@ public class WeaponManager : MonoBehaviour
             {
                 hasShot = false;
             }
+        }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            if (_heldWeapon != null)
+                if (!_heldWeapon.isADS)
+                    _heldWeapon.StartCoroutine(_heldWeapon.AimDownSights(true));
+
+        } else if (Input.GetMouseButtonUp(1))
+        {
+            if (_heldWeapon != null)
+                if (_heldWeapon.isADS)
+                    _heldWeapon.StartCoroutine(_heldWeapon.AimDownSights(false));
         }
         if (shouldFadeIn)
         {

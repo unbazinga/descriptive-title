@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Holder
+  - NonInteractable
   layers:
   - Default
   - TransparentFX
@@ -19,14 +20,14 @@ TagManager:
   - Shells
   - Player
   - 
+  - PostProcessingFX
   - 
   - 
   - 
   - 
   - 
   - 
-  - 
-  - 
+  - IgnorePlayer
   - 
   - 
   - 

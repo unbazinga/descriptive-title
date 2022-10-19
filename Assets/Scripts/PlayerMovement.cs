@@ -39,8 +39,7 @@ public class PlayerMovement : MonoBehaviour
     public float jumpForce;
     private float airMoveMulti = 0.25f;
 
-    [Header("Weapon Stuff")]
-
+    [Header("Weapon Stuff")] public WeaponAttachmentDefinition[] HeldAttachments;
 
     // Input
     private float x, y;
@@ -56,6 +55,12 @@ public class PlayerMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        foreach (var bruh in WeaponDefinition.GetEnumList<WeaponDefinition.WeaponFireMode>())
+        {
+            // Should log each value in WeaponFireMode
+            Debug.Log(bruh);
+        }
+        Debug.Log(WeaponDefinition.GetEnumList<WeaponDefinition.WeaponFireMode>());
         holdArea = GameObject.FindGameObjectWithTag("Holder");
     }
 
@@ -126,21 +131,21 @@ public class PlayerMovement : MonoBehaviour
                 // playerAnimator.Play("Walking Backwards");
             } else if (Input.GetKey(KeyCode.W))
             {
-                if (Input.GetKey(KeyCode.D))
-                {
-                    currentAnim = "Forwards Right";
-                    // playerAnimator.CrossFadeInFixedTime("Forwards Right", 0.1f);
-                    // playerAnimator.Play("Forwards Right");
-    
-                }
-                else
-                {
+                // if (Input.GetKey(KeyCode.D))
+                // {
+                //     currentAnim = "Forwards Right";
+                //     // playerAnimator.CrossFadeInFixedTime("Forwards Right", 0.1f);
+                //     // playerAnimator.Play("Forwards Right");
+                //
+                // }
+                // else
+                // {
 
                     currentAnim = "Walking Forwards";
                     // playerAnimator.CrossFadeInFixedTime("Walking Forwards", 0.1f);
                     // playerAnimator.Play("Walking Forwards");
     
-                }
+                // }
             } else if (Input.GetKey(KeyCode.Space))
             {
                 currentAnim = "Jump";

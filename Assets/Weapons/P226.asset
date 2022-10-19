@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b06e03fc124640209116c198c11468a0, type: 3}
+  m_Name: P226
+  m_EditorClassIdentifier: 
+  weaponFireMode: 2
+  weaponSightPosition: {fileID: 0}
+  weaponKick: 5
+  weaponScreenShake: 0.1
+  weaponSpread: 0.02
+  weaponBulletsPerShot: 1
+  weaponFireRate: 0
+  weaponItemName: SiG P226
+  weaponItemDescription: A SiG P226
+  weaponItemSprite: {fileID: 0}

@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b06e03fc124640209116c198c11468a0, type: 3}
   m_Name: M4A4
   m_EditorClassIdentifier: 
-  weaponFireMode: 2
+  weaponFireMode: 3
+  weaponSightPosition: {fileID: 0}
   weaponKick: 1
   weaponScreenShake: 0
   weaponSpread: 0.05
-  weaponBulletsPerShot: 3
+  weaponBulletsPerShot: 1
   weaponFireRate: 1
   weaponItemName: M4A4
   weaponItemDescription: It's a gun

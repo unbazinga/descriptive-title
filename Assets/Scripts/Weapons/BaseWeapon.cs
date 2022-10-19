@@ -25,10 +25,12 @@ public class BaseWeapon : MonoBehaviour
     {
         if (_held) return;
         Debug.Log("Pickup :))");
+        _rb.velocity = Vector3.zero;
         Destroy(_rb);
         transform.parent = weaponHolder;
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
+        
         foreach (var collider in gfxColliders)
         {
             collider.enabled = false;
@@ -49,6 +51,7 @@ public class BaseWeapon : MonoBehaviour
         _rb.mass = 0.1f;
         var forward = orientation.forward;
         forward.y = 0f;
+        _rb.velocity = Vector3.zero;
         _rb.velocity = forward * (throwForce * throwHeld);
         _rb.velocity += Vector3.up * (throwExtraForce * throwHeld);
         _rb.angularVelocity = Random.onUnitSphere * rotationForce;

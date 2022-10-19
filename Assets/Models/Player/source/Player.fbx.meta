@@ -6,7 +6,37 @@ ModelImporter:
   - first:
       74: -203655887218126122
     second: mixamo.com
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 57
+    second: {fileID: 2100000, guid: db88fc0846836ef428f6de27d79bd8d9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Backpack
+    second: {fileID: 2100000, guid: fb63c911693eb4f4186c1a6787874245, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Duder
+    second: {fileID: 2100000, guid: 76a1566ac5dd2b14a9edd17d3834a1fc, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Duder.001
+    second: {fileID: 2100000, guid: 25b856b9a72779f4686600836752c2e1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Helmet
+    second: {fileID: 2100000, guid: eb931114e2661a74891853be89fa7018, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Tube
+    second: {fileID: 2100000, guid: 17ce0395c3c015d44805d508425b19d6, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -19,14 +49,7 @@ ModelImporter:
     optimizeGameObjects: 0
     motionNodeName: 
     rigImportErrors: 
-    rigImportWarnings: "Avatar Rig Configuration mis-match. Bone length in configuration
-      does not match position in animation file:\n\t'mixamorig:LeftUpLeg' : position
-      error = 9710.852539 mm\n\t'mixamorig:LeftLeg' : position error = 42521.250000
-      mm\n\t'mixamorig:LeftFoot' : position error = 44653.605469 mm\n\t'mixamorig:LeftToeBase'
-      : position error = 16755.044922 mm\n\t'mixamorig:RightUpLeg' : position error
-      = 9635.653320 mm\n\t'mixamorig:RightLeg' : position error = 42524.847656 mm\n\t'mixamorig:RightFoot'
-      : position error = 44637.660156 mm\n\t'mixamorig:RightToeBase' : position error
-      = 16709.904297 mm\n"
+    rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 

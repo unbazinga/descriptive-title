@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.SocialPlatforms;
+using UnityEngine.UI;
 
 public class PhysicsObjectPickup : MonoBehaviour
 {
@@ -18,9 +19,11 @@ public class PhysicsObjectPickup : MonoBehaviour
     public Transform objectHoldArea;
     public Transform objectInteractPosition;
     public LayerMask objectInteractLayers;
+    public LayerMask playerLayer;
     public Transform playerOrientation;
     public Transform objectParent;
     private GameObject _heldObj;
+    private Collider _targetCollider;
     private Rigidbody _targetRb;
 
     void Update()
@@ -33,7 +36,9 @@ public class PhysicsObjectPickup : MonoBehaviour
                 if (LookingAtInteractable() != null)
                 {
                     var hit = LookingAtInteractable().gameObject;
+                    if (hit.CompareTag("NonInteractable")) return;
                     Debug.Log("Raycast Hit an object on the physics object layer");
+                    Debug.Log(hit.name);
                     Pickup(hit);
                 }
                 else
@@ -77,7 +82,7 @@ public class PhysicsObjectPickup : MonoBehaviour
         if (_heldObj && _targetRb)
         {
             Vector3 targetPos = playerCamera.position + playerCamera.forward * holdDistance;
-            _targetRb.velocity = (targetPos - _heldObj.transform.position) * moveStrength / _targetRb.mass;
+            _targetRb.velocity = ((targetPos - _heldObj.transform.position) * moveStrength) / _targetRb.mass;
         }
     }
 
@@ -88,7 +93,8 @@ public class PhysicsObjectPickup : MonoBehaviour
         target.TryGetComponent(out Rigidbody targetRb);
         if (targetRb)
         {
-            if (target.TryGetComponent(out WeaponInterface weaponInterface))
+            target.TryGetComponent(out WeaponInterface weaponInterface);
+            if (weaponInterface != null)
             {
                 weaponInterface.HeldAsPhysicsObject = true;
                 isHeldObjectAWeapon = true;
@@ -96,7 +102,6 @@ public class PhysicsObjectPickup : MonoBehaviour
                 _targetRb = targetRb;
                 _targetRb.useGravity = false;
                 _targetRb.drag = 10;
-            
                 target.transform.SetParent(objectParent);
                 _heldObj = target;
             }
@@ -106,7 +111,10 @@ public class PhysicsObjectPickup : MonoBehaviour
                 _targetRb = targetRb;
                 _targetRb.useGravity = false;
                 _targetRb.drag = 10;
-                
+
+                if (target.TryGetComponent(out Collider col)) _targetCollider = col;
+
+                target.layer = 20;
                 target.transform.SetParent(objectParent);
                 _heldObj = target;
             }
@@ -120,20 +128,25 @@ public class PhysicsObjectPickup : MonoBehaviour
             _heldObj.TryGetComponent(out WeaponInterface weaponInterface);
             weaponInterface.HeldAsPhysicsObject = false;
             Debug.Log("Drop");
+            Debug.Log(_targetRb.velocity);
             _targetRb.transform.parent = null;
             _targetRb.useGravity = true;
             _targetRb.drag = 0;
             _targetRb.velocity = Vector3.zero;
-            _targetRb.AddForce(playerOrientation.forward * force);
+            _targetRb.AddForce(playerOrientation.forward * (force / _targetRb.mass));
+            isHeldObjectAWeapon = false;
             _heldObj = null;
         } else
         {
             Debug.Log("Drop");
             _targetRb.transform.parent = null;
             _targetRb.useGravity = true;
+            _targetCollider.enabled = true;
             _targetRb.drag = 0;
             _targetRb.velocity = Vector3.zero;
-            _targetRb.AddForce(playerOrientation.forward * force);
+            _targetRb.gameObject.layer = 9;
+            _targetRb.AddForce(playerOrientation.forward * (force / _targetRb.mass));
+            
             _heldObj = null;
         }
     }
