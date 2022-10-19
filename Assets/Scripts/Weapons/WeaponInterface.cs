@@ -63,7 +63,7 @@ public class WeaponInterface : MonoBehaviour, IPickupable
             transform.localPosition = Vector3.Lerp(transform.localPosition, weaponSightPosition.position,
                 adsSpeed * Time.deltaTime);
         }
-        // .
+        
         yield return new WaitWhile(() => transform.localPosition != weaponSightPosition.position);
         
         //transform.localPosition = Vector3.Lerp(transform.localPosition, shouldADS ? weaponSightPosition.position : Vector3.zero, Time.deltaTime * adsSpeed);
