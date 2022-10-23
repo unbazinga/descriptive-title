@@ -26,13 +26,15 @@ public class WeaponInterface : MonoBehaviour, IPickupable
     public int weaponGfxLayer;
     public int weaponDefLayer;
     public bool _held;
+
+
     public bool isADS;
     public float adsSpeed;
     public bool HeldAsPhysicsObject { get; set; }
     public bool shouldBulletsSpread;
     public LayerMask shootMask;
     
-
+    
     public void Shoot()
     {
         Debug.Log("Shooting");
@@ -140,4 +142,5 @@ public class WeaponInterface : MonoBehaviour, IPickupable
 
         Destroy(Trail.gameObject, Trail.time);
     }
+
 }

@@ -23,6 +23,11 @@ public class WeaponManager : MonoBehaviour
     private bool hasShot;
     private bool shouldFadeOut, shouldFadeIn;
 
+    public float swayIntensity;
+    public float swaySmoothing;
+
+    private static Quaternion _origin;
+
     private void Awake()
     {
         StrengthBarHandler.maxStrength = throwPowerMax;
@@ -35,6 +40,7 @@ public class WeaponManager : MonoBehaviour
         
         if (_isWeaponHeld)
         {
+            WeaponSwayUpdate();
             if (Input.GetKey(KeyCode.Q))
             {
                 shouldFadeIn = true;
@@ -97,7 +103,8 @@ public class WeaponManager : MonoBehaviour
             _isWeaponHeld = true;
             _heldWeapon = tList[0].transform.GetComponent<WeaponInterface>();
             _heldWeapon.Pickup(weaponHolder);
-            
+            _origin = _heldWeapon.transform.localRotation;
+
         } 
         if (Input.GetKeyDown(KeyCode.X))
         {
@@ -204,6 +211,20 @@ public class WeaponManager : MonoBehaviour
             StrengthBarHandler.StartCoroutine(StrengthBarHandler.FadeOut(.35f, timeForUIToFadeOut));
             shouldFadeOut = false;
         }
+    }
+    
+    void WeaponSwayUpdate()
+    {
+        float xM = Input.GetAxis("Mouse X"), yM = Input.GetAxis("Mouse Y");
+        if (!_heldWeapon._held) return;
+        Debug.Log("Sway");
+        var xAdj = Quaternion.AngleAxis(swayIntensity * xM, Vector3.up);
+        var yAdj = Quaternion.AngleAxis(swayIntensity * yM, Vector3.right);
+        var targetRot = _origin * xAdj * yAdj;
+        _heldWeapon.transform.localRotation =
+            Quaternion.Lerp(_heldWeapon.transform.localRotation, targetRot, swaySmoothing * Time.deltaTime);
+
+
     }
 
     private float GetDistanceTo(RaycastHit raycastHit)

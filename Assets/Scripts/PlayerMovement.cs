@@ -17,12 +17,15 @@ public class PlayerMovement : MonoBehaviour
     public Transform objectInteract;
     public LayerMask objectInteractLayers;
     public static GameObject holdArea;
+    public WeaponInterface weaponInterface;
     [FormerlySerializedAs("ObjectInteractReach")] public float objectInteractReach;
     private Rigidbody rb;
     private bool isInteractableHighlighted = false;
     
     [Header("Movement -- Generic")]
     public float moveSpeed;
+
+    public float defMoveSpeed;
     public float runMulti;
     public bool grounded;
     public float maxSpeed;
@@ -39,17 +42,20 @@ public class PlayerMovement : MonoBehaviour
     public float jumpForce;
     private float airMoveMulti = 0.25f;
 
-    [Header("Weapon Stuff")] public WeaponAttachmentDefinition[] HeldAttachments;
+    [Header("Weapon Stuff")] 
+    public WeaponAttachmentDefinition[] HeldAttachments;
 
+
+    
     // Input
     private float x, y;
-    private bool jumping, sprinting, crouching;
+    private bool jumping, crouching;
+    public bool sprinting;
 
     private void Awake()
     {
         rb = this.GetComponent<Rigidbody>();
         rb.freezeRotation = true;
-        
     }
 
     // Start is called before the first frame update
@@ -87,6 +93,7 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         Movement();
+        
         waitBeforeJump += Time.deltaTime;
     }
 
@@ -122,6 +129,15 @@ public class PlayerMovement : MonoBehaviour
             readyToJump = false;
             Jump();
             Invoke(nameof(ResetJump), jumpCooldown);
+        }
+        if (Input.GetButtonDown("Sprint") && grounded && moveSpeed == defMoveSpeed)
+        {
+            moveSpeed = moveSpeed * runMulti;
+            sprinting = true;
+        } else if (Input.GetButtonUp("Sprint") && moveSpeed != defMoveSpeed)
+        {
+            moveSpeed = defMoveSpeed;
+            sprinting = false;
         }
         if(grounded) {        
             if (Input.GetKey(KeyCode.S))
@@ -163,6 +179,7 @@ public class PlayerMovement : MonoBehaviour
         //playerAnimator.CrossFade(currentAnim, 0.25f);
         playerAnimator.Play(currentAnim);
     }
+
 
     void SpeedControls()
     {
