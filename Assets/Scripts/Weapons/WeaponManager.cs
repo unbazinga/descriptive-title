@@ -218,7 +218,7 @@ public class WeaponManager : MonoBehaviour
         float xM = Input.GetAxis("Mouse X"), yM = Input.GetAxis("Mouse Y");
         if (!_heldWeapon._held) return;
         Debug.Log("Sway");
-        var xAdj = Quaternion.AngleAxis(swayIntensity * xM, Vector3.up);
+        var xAdj = Quaternion.AngleAxis(-swayIntensity * xM, Vector3.up);
         var yAdj = Quaternion.AngleAxis(swayIntensity * yM, Vector3.right);
         var targetRot = _origin * xAdj * yAdj;
         _heldWeapon.transform.localRotation =

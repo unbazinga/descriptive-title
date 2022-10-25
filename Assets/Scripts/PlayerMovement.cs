@@ -130,11 +130,11 @@ public class PlayerMovement : MonoBehaviour
             Jump();
             Invoke(nameof(ResetJump), jumpCooldown);
         }
-        if (Input.GetButtonDown("Sprint") && grounded && moveSpeed == defMoveSpeed)
+        if (Input.GetButtonDown("Sprint") && grounded && Math.Abs(moveSpeed - defMoveSpeed) < 0.05f)
         {
-            moveSpeed = moveSpeed * runMulti;
+            moveSpeed *= runMulti;
             sprinting = true;
-        } else if (Input.GetButtonUp("Sprint") && moveSpeed != defMoveSpeed)
+        } else if (Input.GetButtonUp("Sprint") && Math.Abs(moveSpeed - defMoveSpeed) > 0.05f)
         {
             moveSpeed = defMoveSpeed;
             sprinting = false;
